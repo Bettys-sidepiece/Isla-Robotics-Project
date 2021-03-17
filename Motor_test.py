@@ -21,8 +21,8 @@ MB2 = machine.Pin(12, machine.Pin.OUT)
 MB1PWM = machine.PWM(machine.Pin(10))
 
 # frequency goes from 10Hz to 20000Hz.
-# A frequency of between 1000 -(~3500) has shown to be most effiencent,
-#but you are free to experiment with the frequency
+# A frequency of between 1000 -(~3500) works best.
+# but you are free to experiment with different frequencies.
 
 MB1PWM.freq(2000)
 
