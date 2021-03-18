@@ -1,4 +1,4 @@
-# Micro_Bot.py
+# Mini_Bot.py
 import machine
 import utime
 
@@ -130,5 +130,5 @@ button.irq(trigger=machine.Pin.IRQ_RISING, handler=button_irq)
 irsensor_1.irq(trigger=machine.Pin.IRQ_FALLING, handler=avoid)
 irsensor_2.irq(trigger=machine.Pin.IRQ_FALLING, handler=avoid)
 
-#Run the main function
+#Runs the main function
 run()
