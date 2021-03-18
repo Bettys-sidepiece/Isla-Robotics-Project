@@ -33,7 +33,7 @@ MB1PWM.duty_u16(39321)
 global count
 count = 0
 
-
+#Action Definitions
 def forward():
     MA1.value(1)
     MA2.value(0)
@@ -68,7 +68,7 @@ def turnright():
     MB1.value(0)
     MB2.value(0)
   
-  
+ #This function is intended to be used to test the motors on the mini bot
 def test():
     print("Test Sequence initailized\n")
     while count < 4:
