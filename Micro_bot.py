@@ -67,7 +67,8 @@ def turnright():
     MA2.value(0)
     MB1.value(0)
     MB2.value(0)
-  
+ 
+
  #This function is intended to be used to test the motors on the mini bot
 def test():
     print("Test Sequence initailized\n")
@@ -100,7 +101,8 @@ def button_irq(but):
         while button1.value() == 1:
             utime.sleep(0.1)
         print("Motors: Starting")
-            
+   
+
 def avoid(pin):
     if irsensor_1.value() == 0:
         print("\nIR1:Obstacle Detected\nTurning left")
@@ -120,6 +122,7 @@ def avoid(pin):
         turnright()
         utime.sleep(1)
 
+        
 #Main function
 def run():
     while True:
