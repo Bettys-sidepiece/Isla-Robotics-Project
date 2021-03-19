@@ -6,7 +6,7 @@ import utime
 irsensor_1 = machine.Pin(3,machine.Pin.IN)
 irsensor_2 = machine.Pin(2,machine.Pin.IN)
 
-#Button input
+#Button Input
 button = machine.Pin(14, machine.Pin.IN, machine.Pin.PULL_UP)
 button1 = machine.Pin(15, machine.Pin.IN, machine.Pin.PULL_UP)
 
@@ -14,21 +14,15 @@ button1 = machine.Pin(15, machine.Pin.IN, machine.Pin.PULL_UP)
 MA1 = machine.Pin(7, machine.Pin.OUT)
 MA2 = machine.Pin(8, machine.Pin.OUT)
 MA1PWM = machine.PWM(machine.Pin(6))
-MA1PWM.freq(2000) # frequency goes from 10Hz to 20000Hz
-MA1PWM.duty_u16(39321) # 60% Duty Cycle, 100% is 65536
+MA1PWM.freq(2000) #Frequency goes from 10Hz to 20000Hz
+MA1PWM.duty_u16(39321) #60% Duty Cycle, 100% is 65536
 
 #Motor B
 MB1 = machine.Pin(11, machine.Pin.OUT)
 MB2 = machine.Pin(12, machine.Pin.OUT)
 MB1PWM = machine.PWM(machine.Pin(10))
-
-# frequency goes from 10Hz to 20000Hz.
-# A frequency of between 1000 -(~3500) has shown to be most effiencent,
-#but you are free to experiment with the frequency
-MB1PWM.freq(2000)
-
-# 60% Duty Cycle, 100% is 65536
-MB1PWM.duty_u16(39321) 
+MB1PWM.freq(2000) #Frequency goes from 10Hz to 20000Hz.
+MB1PWM.duty_u16(39321) #60% Duty Cycle, 100% is 65536
 
 global count
 count = 0
