@@ -6,7 +6,7 @@ import utime
 irsensor_1 = machine.Pin(3,machine.Pin.IN)
 irsensor_2 = machine.Pin(2,machine.Pin.IN)
 
-#Input of the 
+#Button input
 button = machine.Pin(14, machine.Pin.IN, machine.Pin.PULL_UP)
 button1 = machine.Pin(15, machine.Pin.IN, machine.Pin.PULL_UP)
 
