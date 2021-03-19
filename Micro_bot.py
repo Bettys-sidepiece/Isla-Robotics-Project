@@ -68,8 +68,7 @@ def turnright():
     MB1.value(0)
     MB2.value(0)
  
-
- #This function is intended to be used to test the motors on the mini bot
+#This function is intended to be used to test the motors on the mini bot
 def test():
     print("Test Sequence initailized\n")
     while count < 4:
@@ -121,8 +120,7 @@ def avoid(pin):
         utime.sleep(1)
         turnright()
         utime.sleep(1)
-
-        
+       
 #Main function
 def run():
     while True:
