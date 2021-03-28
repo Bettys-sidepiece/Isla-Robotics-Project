@@ -39,7 +39,7 @@ class PID:
     
     def control(self):
         if self.interval == 0:
-            raise Exception("TimerError: Timer interval is not set")
+            raise Exception("TimerError: Time interval is not set")
         else:
             error = self.setpoint - self.feedback
             
