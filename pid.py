@@ -12,21 +12,25 @@ class PID:
         self.feedback = 0
         self.previous_time = 0
         self.previous_error = 0
+        
         self.derivative = 0
         self.integral = 0
-        self.max_value = 0
-        self.min_value = 0
-        self.interval = 0
+        self.proportional = 0
+        
+#         self.max_value = 0
+#         self.min_value = 0
+        self.dt = 0
         self.output = 0
+        
 
     
     def set_interval(self, interval):
-        self.interval = interval
+        self.dt = interval/1000
     
     
-    def set_limits(self, MAX, MIN):
-        self.max_error = MAX
-        self.min_error = MIN
+#     def set_limits(self, MAX, MIN):
+#         self.max_error = MAX
+#         self.min_error = MIN
         
         
     def set_feedback(self, measure):
@@ -37,28 +41,57 @@ class PID:
         self.setpoint  = value
     
     
-    def control(self):
-        if self.interval == 0:
-            raise Exception("TimerError: Time interval is not set")
+    def change_in_error(self, error):
+        if (error > 0 ) and self.previous_error < 0:
+            return True
+        if (error < 0 ) and self.previous_error > 0:
+            return True
+        return False
+    
+    
+    
+    def update(self):
+        if self.dt == 0:
+            raise Exception("TimerError: Timer interval is not set")
         else:
             error = self.setpoint - self.feedback
             
-            proportional = self.Kp * error
-            self.integral = self.integral + error * self.interval/1000
-            
-            # Prevent integral windup
-            if (proportional > self.max_value) or (proportional < self.min_value):
+            if self.change_in_error(error) == True:
                 self.integral = 0
-            self.derivative = (error - self.previous_error) / (self.interval/1000)
-        
-            self.output = (proportional + self.Ki * self.integral + self.Kd * self.derivative)
-            self.previous_error = error
+                
+            self.integral += error * self.dt
             
-    def get_response(self):
+            self.proportional = self.Kp * error
+            
+            if self.dt > 0 : 
+                self.derivative = (error - self.previous_error) / (self.dt)
+            else:
+                self.derivative = 0
+            
+            self.previous_error = error
+            self.output = (self.proportional + self.Ki * self.integral + self.Kd * self.derivative)
+            return self.output
+          
+    def get_output(self):
         return self.output
     
-    #def control_data(self, timer):
     
-    def stop(self):
-        self.timer.deinit()
+    def get_setpoint(self):
+        return self.setpoint
+    
+    
+    def get_integral(self):
+        return self.intergral
+    
+    
+    def get_derivative(self):
+        return self.derivative
+    
+    
+    def get_feedback(self):
+        return self.feedback
+    
+
+    #def control_data(self, timer):
+  
 
