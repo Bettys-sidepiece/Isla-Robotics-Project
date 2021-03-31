@@ -10,36 +10,31 @@ irsensor_2 = machine.Pin(14,machine.Pin.IN) #Right
 
 #PWM Definitions
 
-LO_PWM = 40000 #65% Dc
-NOM_PWM = 46000 #70% Dc
-HI_PWM = 55000
+LO_PWM = 40000 #61% Duty Cycle
+NOM_PWM = 46000 #70% Duty Cycle
+HI_PWM = 55000 # 84% Duty Cycle
 
 #Motor A
 MA1 = machine.Pin(4, machine.Pin.OUT)
 MA2 = machine.Pin(3, machine.Pin.OUT)
+
 MA1PWM = machine.PWM(machine.Pin(2))
 MA1PWM.freq(3000) # frequency goes from 10Hz to 20000Hz
-
 PWMA = 46000
-MA1PWM.duty_u16(PWMA) # 60% Duty Cycle, 100% is 65536
+MA1PWM.duty_u16(PWMA)
 
 #Motor B
 MB1 = machine.Pin(7, machine.Pin.OUT)
 MB2 = machine.Pin(8, machine.Pin.OUT)
+
 MB1PWM = machine.PWM(machine.Pin(6))
-
-# frequency goes from 10Hz to 20000Hz.
-# A frequency of between 1000 -(~3500) has shown to be most effiencent
 MB1PWM.freq(3000)
-
-# 60% Duty Cycle, 100% is 65536
 PWMB = 46000
 MB1PWM.duty_u16(PWMB)
 
 # Speed sensor inputs
 MS1 = machine.Pin(10, machine.Pin.IN)
 MS2 = machine.Pin(11, machine.Pin.IN)
-
 timer = machine.Timer(-1)
 
 # Counter variables
@@ -57,24 +52,21 @@ hr = 0
 
 # PID Speed Control
 #dummy_var = 0
-
 Kp = 2
 Ki = 0.1
 Kd = 0
+#Motor 1
 speed_control = PID(Kp,Ki,Kd) #Kp, Ki, Kd
 speed_control.set_interval(1000) #In milliseconds
 speed_control.set_setpoint(250)
 
+#Motor 2
 speed_control2 = PID(Kp,Ki,Kd) #Kp, Ki, Kd
 speed_control2.set_interval(1000) #In milliseconds
 speed_control2.set_setpoint(250)
 
-#speed_control.control()
-
 
 def forward():
-    global timeout
-    timeout = 0
     MA1.value(1)
     MA2.value(0)
     MB1.value(0)
@@ -95,10 +87,7 @@ def stop():
     MB2.value(0)
   
   
-def turnleft():
-    global timeout
-    timeout += 1
-    
+def turnleft():   
     PWMA = 50000
     MA1.value(1)
     MA2.value(0)
@@ -107,8 +96,6 @@ def turnleft():
 
 
 def turnright():
-    global timeout
-    timeout += 1
     
     PWMB = 50000
     MA1.value(0)
@@ -119,7 +106,6 @@ def turnright():
  
 def avoid():
     global timeout
-
     if irsensor_2.value() == 0:
         turnleft()
         utime.sleep(0.25)
