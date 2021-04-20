@@ -1,5 +1,5 @@
 #Motor Speed Control
-#speed_control.py
+#mini_bot.py
 #Author : Kuzipa Mumba
 import machine
 import utime
@@ -39,32 +39,22 @@ counter2 = 0
 current_rpm1 = 0
 current_rpm2 = 0
 
-
 #PID Speed Control
             #Kp,Ki,Kd
 M1_ctrl = PID(10,7,0)
 M2_ctrl = PID(10,7,0)
 
+#Time to wait to start new control loop calculation (in milliseconds)
 M1_ctrl.set_interval(1000)
 M2_ctrl.set_interval(1000)
 
+#Control Output Limits
 M1_ctrl.set_limits(1000, -1000)
 M2_ctrl.set_limits(1000, -1000)
 
+#Motor speed setpoint
 M1_ctrl.set_target(102)
 M2_ctrl.set_target(102)
-
-
-def oled_scroll():
-    for i in range (0, 164):
-        oled.scroll(1,0)
-        oled.show()
-        utime.sleep(0.01)
-        
-            
-def clear_oled():
-    oled.fill(0)
-    oled.show()
 
 
 def speed_control():
@@ -120,33 +110,33 @@ def reverse():
     MB1.value(0)
     MB2.value(1)
 
-
+#No current is flowing to the motors
 def stop():
     MA1.value(0)
     MA2.value(0)
     MB1.value(0)
     MB2.value(0)
   
-  
+#Allows the robot to turn left
 def turnleft():   
     MA1.value(1)
     MA2.value(0)
     MB1.value(0)
     MB2.value(0)
 
-
+#Allows the robot to turn right
 def turnright():
     MA1.value(0)
     MA2.value(0)
     MB1.value(1)
     MB2.value(0)
  
- 
+#Speed Sensor 1 counter interrupt
 def counter1_IRQ(int1):
     global counter1
     counter1 += 1
     
-    
+#Speed Sensor 2 counter interrupt
 def counter2_IRQ(int2):
     global counter2
     counter2 += 1
@@ -203,18 +193,14 @@ def pulse_delay(time):
 def run():
     stop()
     utime.sleep(2)
+    #Timer interrupt
     timer.init(period = 1000, mode=machine.Timer.PERIODIC, callback=pulse_delay)
     while True:
         forward()
         
-
 #INTERRUPTS
 MS1.irq(trigger=machine.Pin.IRQ_RISING, handler=counter1_IRQ) #left motor
 MS2.irq(trigger=machine.Pin.IRQ_RISING, handler=counter2_IRQ) #right motor
 
-
 #Run the main function
 run()
-
-
-
