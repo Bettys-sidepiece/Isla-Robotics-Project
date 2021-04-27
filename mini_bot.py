@@ -1,5 +1,5 @@
 #Motor Speed Control
-#speed_control.py
+#mini_bot.py
 #Author : Kuzipa Mumba
 import machine
 import utime
