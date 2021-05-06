@@ -1,4 +1,3 @@
 Robotics Project: Mini Bot
 --------------------------
-
-Tiny Autonomous Raspberry Pi Pico based robot. 
+In the project I use the raspberry pico to controller a little autonomous robot
