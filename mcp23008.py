@@ -2,7 +2,7 @@
 MCP23008 8-Bit I/O Expander (I2C)
 2021 Kuzipa Mumba
 
-Mircopython derivative of Adafruit Circuit Python mcp230xx, mcp23008 and DigitalIO modules designed for the MCP230xx 
+Mircopython derivative of Adafruit's CircuitPython mcp230xx, mcp23008 and DigitalIO modules designed for the MCP230xx 
 Family of I/O Expanders.
 
 https://github.com/adafruit/Adafruit_CircuitPython_MCP230xx/tree/main/adafruit_mcp230xx 
