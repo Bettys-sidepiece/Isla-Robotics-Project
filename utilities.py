@@ -1,3 +1,7 @@
+#UTILITIES CLASS
+#Copyright (c) 2021
+#Author: Kuzipa Mumba for the RP2040 Raspberry Pi Pico
+
 import machine
 import utime
 from ssd1306 import SSD1306_I2C
@@ -5,8 +9,11 @@ import mcp23008
 
 
 class UTILITIES():
-    
+    """
+    """
     def __init__(self,setup = True):
+        """
+        """
         i2c = machine.I2C(0,scl = machine.Pin(21), sda= machine.Pin(20), freq = 400000)
         self.oled = SSD1306_I2C(128,64,i2c)
         self.io = mcp23008.MCP23008()
@@ -14,6 +21,8 @@ class UTILITIES():
         self.prev_display = None
          
         if setup:
+            """
+            """
             outPins = list(range(0,4))
             nextVals = {}
             for pinNum in outPins:
@@ -26,6 +35,8 @@ class UTILITIES():
               
               
     def buzzer(self):
+        """
+        """
         utime.sleep(0.1)
         for i in range(50):
             for j in range(1):
@@ -37,6 +48,8 @@ class UTILITIES():
         
         
     def start_up(self):
+        """
+        """
         self.buzzer()
         self.oled.contrast(15)
         self.oled.fill(0)
@@ -60,22 +73,32 @@ class UTILITIES():
     
     
     def disp_back(self):
+        """
+        """
         self.oled.text("<",5,7)
         
 
     def disp_sel(self):
+        """
+        """
         self.oled.text("+",5,53)
         
         
     def disp_up(self):
+        """
+        """
         self.oled.text("up",110,7)
 
 
     def disp_down(self):
+        """
+        """
         self.oled.text("dn",110,53)
         
         
     def cursor(self,pos):
+        """
+        """
         if self.prev_pos < 20:
             self.oled.fill_rect(15,0,5,64,0)
             self.oled.text(">",15,40)
@@ -93,15 +116,22 @@ class UTILITIES():
     
     
     def cursor_up(self):
+        """
+        """
         self.buzzer()
         self.cursor(self.prev_pos-10)
         
+        
     def cursor_down(self):
+        """
+        """
         self.buzzer()
         self.cursor(self.prev_pos+10)
         
         
     def menu_options(self,title,opt_1,opt_2,opt_3):
+        """
+        """
         self.oled.fill(0)
         self.oled.text(title,35,5)
         self.oled.text(opt_1,30,20)
@@ -110,6 +140,8 @@ class UTILITIES():
     
     
     def title_screen(self,line1,line2,x_1,x_2):
+        """
+        """
         self.oled.fill(0)
         self.oled.text(line1,x_1,20)
         self.oled.text(line2,x_2,30)
@@ -117,30 +149,42 @@ class UTILITIES():
         
         
     def OT_header(self):
+        """
+        """
         self.oled.text("OBJECT TRACKING",15,10)
         self.disp_back
         
         
     def OA_header(self):
+        """
+        """
         self.oled.text("PROXIMITY",25,45)
         self.disp_back
         
         
     def maze_header(self):
+        """
+        """
         self.oled.text("MAZE SOLVER",25,5)
         self.disp_back
     
     
     def line_header(self):
+        """
+        """
         self.oled.text("LINE TRACKING",25,5)
         self.disp_back
     
     
     def combat_header(self):
+        """
+        """
         self.oled.text("LINE TRACKING",35,5)
         self.disp_back
     
     def prox_disp(self,l,cl,cr,r):
+        """
+        """
         self.oled.fill(0)
         self.oled.fill_rect(10, 25, 15, 15, l)
         self.oled.fill_rect(40, 25, 15, 15, cl)
