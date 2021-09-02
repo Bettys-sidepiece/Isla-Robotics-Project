@@ -2,9 +2,13 @@ import machine
 import utime
 
 class MOTORS:
-    """
+    """ The Motors class configures motor parameters of the ISLA robot motors
+        enabling for motor and speed control.
     """
     def __init__(self,MA1=9,MA2=8,PWMA=7,MB1=4,MB2=5,PWMB=6):
+        """ Set Motor control and PWM pins, and initialise other motor
+            control parameters and variables
+        """
         
         #Motor control Declarations
         self._MA1 = machine.Pin(MA1,machine.Pin.OUT)
@@ -48,7 +52,6 @@ class MOTORS:
         self.error_M1 = 0
         self.error_M2 = 0
         
-    
     
     def speed_control_init(self):
         """ initialise motor speed control.
@@ -201,19 +204,22 @@ class MOTORS:
         
         
     def distance_(self):
-        """ Determines the distance travelled by each motor 
+        """ Determines the distance travelled by each motor
         """
-        radius = 2.1 #centimeters
-        circ = 2*radius * 3.14
+        radius = 2.1 # Default radius of wheels used in cm
+        circ = 2*radius * 3.14 #Circumfrence of the wheel
         
-        self.distance_M1 = circ*self.M1_Rev
-        self.distance_M2 = circ*self.M2_Rev
-        self.distance = (self.distance_M1+ self.distance_M2)/2
-        self.dist_travelled = self.distance +self.dist_travelled
+        self.distance_M1 = circ*self.M1_Rev #Calculate the distance travelled by motor A
+        self.distance_M2 = circ*self.M2_Rev #Calculate the distance travelled by motor B
+        
+        self.distance = (self.distance_M1+ self.distance_M2)/2 # Calculate the average distance travelled by the robot
+        self.dist_travelled = self.distance +self.dist_travelled # Cumulative the average distance travelled by the robot
+        
          
         
     def pulse_control(self,time):
-        """ 
+        """ Timer interrupt function calculates the rotation, error of each motor
+            and calls distance and speed control functions.
         """
         self.timer.deinit() #Disable the virtual timer
     
