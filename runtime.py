@@ -499,6 +499,7 @@ class RUNTIME():
                 self.util.buzzer()
                 break
      
+    
     def sensors(self):
         self.util.prev_pos = 20
         while self.util.io.input(6):
@@ -526,6 +527,7 @@ class RUNTIME():
                 self.util.buzzer()
                 break
      
+    
     def motors_(self):
         self.util.prev_pos = 20
         while self.util.io.input(6):
@@ -603,7 +605,8 @@ class RUNTIME():
     def ui(self):
         self.util.disp_back()
         self.util.oled.show()
-          
+        
+        
     def icon(self,scr):
         if scr :
             self.util.disp_back()
