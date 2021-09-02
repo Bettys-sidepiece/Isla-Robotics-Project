@@ -1,3 +1,7 @@
+#MCP3002 CLASS
+#Copyright (c) 2021
+#Author: Kuzipa Mumba for the RP2040 Raspberry Pi Pico
+
 import machine
 import utime
 
@@ -23,6 +27,7 @@ class MCP3002():
         if reset:
             self._cs.value(1) # Default to Chip select status .
             reset = False
+    
     
     def adc_read(self,channel):
         """ adc_read performs an SPI transaction depending on the channel, constucts 
