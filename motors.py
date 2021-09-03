@@ -13,7 +13,6 @@ class MOTORS:
         """ Set Motor control and PWM pins, and initialise other motor
             control parameters and variables
         """
-        
         #Motor control Declarations
         self._MA1 = machine.Pin(MA1,machine.Pin.OUT)
         self._MA2 = machine.Pin(MA2,machine.Pin.OUT)
@@ -22,9 +21,10 @@ class MOTORS:
         
         self.MAPWM = machine.PWM(machine.Pin(PWMA))
         self.MBPWM = machine.PWM(machine.Pin(PWMB))
-        self.LO_PWM = 0
-        self.NOM_PWM = 0
-        self.HI_PWM = 0
+        
+        self.LO_PWM = 0 #Default Setting
+        self.NOM_PWM = 0 #Default Setting
+        self.HI_PWM = 0 #Default Setting
         
         #Initialise a virtual timer for periodic speed control
         self.timer = machine.Timer()
@@ -50,7 +50,7 @@ class MOTORS:
         self.distance_M1 = 0
         self.distance_M2 = 0
         self.dist_travelled = 0
-        self.K = 7*2*30
+        self.K = 7*2*30 # Constant 
         self.prev_M2 = 0
         self.prev_M1 = 0
         self.error_M1 = 0
