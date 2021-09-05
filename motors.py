@@ -6,7 +6,7 @@ import machine
 import utime
 
 class MOTORS:
-    """ The Motors class configures motor parameters of the ISLA robot motors
+    """ The Motors class configures motor parameters of the the two micro gearmotors
         enabling for motor and speed control.
     """
     def __init__(self,MA1=9,MA2=8,PWMA=7,MB1=4,MB2=5,PWMB=6):
