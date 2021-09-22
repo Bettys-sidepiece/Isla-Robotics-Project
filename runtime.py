@@ -10,47 +10,59 @@ from sensors import *
 
     
 class RUNTIME():
+    """The RUNTIME CLASS is used to run the device by using other bespoke modules
+       to control the motors, enable user to device communication, display text and
+       oled display and cohesively control the sensors the device.
+    """
     def __init__(self):
+        """Configures the Motors,Proximity,Line and UI parameters of  the device"""
+        self.LO = 35000  #Low speed default duty cycle
+        self.MED = 40000 #Medium speed default duty cycle
+        self.HI = 45000  #High speed default duty cycle
         
-        self.LO = 35000
-        self.MED = 40000
-        self.HI = 45000
-        self.drive = MOTORS()
-        self.drive.set_PWM(LO=self.LO,MED=self.MED,HI=self.HI)
+        self.drive = MOTORS() #Create object of MOTORS Class
+        self.drive.set_PWM(LO=self.LO,MED=self.MED,HI=self.HI) 
         self.drive.set_freq(100)
-        self.drive.motor_drive()
-        self.drive.encoders()
+        self.drive.motor_drive() # Turns on the motors
+        self.drive.encoders() # Enables encoders
     
-        self.prox = PROXIMITY()
-        self.line = LINE()
-        self.bat = BATTERY()
-        self.util = UTILITIES()
-        self.reset = machine.Pin(22,machine.Pin.OUT)
+        self.prox = PROXIMITY() #Create object of Proximity Class
+        self.line = LINE()   #Create object of Line Class
+        self.bat = BATTERY() #Create object of Battery Class
+        self.util = UTILITIES()  #Create object of Utilities Class
+        self.reset = machine.Pin(22,machine.Pin.OUT) 
         
     
-    def run(self):
-        self.drive.stop()
-        self.util.start_up()
-        self.drive.interrupt_enable()
-        self.bat.bat_sensor_en()
+    def run(self): # Main function 
+        self.drive.stop() #Reset motors to off
+        self.util.start_up() # Run Isla start up screen
+        self.drive.interrupt_enable() #Enable encorder interrupt
+        self.bat.bat_sensor_en() # Initialise the on-board battery voltage sensor
         while True:
-            self.menu()
+            self.menu() 
             
     
     def disp_bat(self):
+        """Displays the current battery voltage at the bottom of
+           oled display
+        """
         self.util.oled.text(self.bat.bat_str(),43,55)
     
     
     def object_tracking(self):
+        """ The object tracking feature uses the four IR leds to
+            track and the position of an object in from of the robot.
+            Note: Can no be used in areas with extreme light or crowded areas
+        """
         self.util.buzzer()
         self.util.buzzer()
-        self.util.title_screen("OBJECT","TRACKING",35,20)
+        self.util.title_screen("OBJECT","TRACKING",35,25)
         utime.sleep(1.5)
-        run_bat = str(round(self.bat.battery,2))+"V"
-        self.bat.bat_deinit()
+        run_bat = str(round(self.bat.battery,2))+"V" #Hold the volatge at the start of the mode
+        self.bat.bat_deinit() # Deinitilise the Battery Sensor
         
         while self.util.io.input(6):
-            self.prox.proximity_enable()
+            self.prox.proximity_enable() #Enable Proximity Sensor
             if self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 0:
                 utime.sleep_ms(8)
                 self.drive.stop()
@@ -108,26 +120,19 @@ class RUNTIME():
                 utime.sleep_ms(25)
                 self.drive.stop()
                 
-            self.util.oled.text(run_bat,43,55) 
-            self.ui() 
+            self.util.oled.text(run_bat,43,55) #Display battery laevel at start of mode
+            self.ui()
             
-            if not self.util.io.input(7):
+            if not self.util.io.input(6): #Exit the mode
                 self.util.buzzer()
-                while self.util.io.input(7):
-                    self.util.oled.fill(0)
-                    self.util.oled.text("PAUSED",35,30)
-                    self.util.OT_header()
-                    self.util.oled.show()   
-                break
-            
-            if not self.util.io.input(6):
-                self.util.buzzer()
-                self.bat.bat_sensor_en()
+                self.bat.bat_sensor_en() #Enable battery sensor
                 break
 
 
     def proximity_calibration(self):
-        
+        """ Allows the user to calibrate the sensitivity of the proximity sensors
+            using the OLED display and two potentiometers. 
+        """
         self.util.buzzer()
         self.util.buzzer()
         self.util.title_screen("PROXIMITY","CALIBRATION",30,20)
@@ -212,62 +217,80 @@ class RUNTIME():
         
         
     def proximity_sensor(self):
+        """Obstacle avoidance feature"""
         self.util.buzzer()
         self.util.title_screen("OBSTACLE","AVOIDING",35,25)
         utime.sleep(1)
-        run_bat = str(round(self.bat.battery,2))
-        self.bat.bat_deinit()
-        self.drive.speed_control_init()
-        self.prox.proximity_enable()
+        run_bat = str(round(self.bat.battery,2))  #Record most recent battery level
+        self.bat.bat_deinit() 
+        self.drive.speed_control_init() #Enable Motor Speed Control
+        self.prox.proximity_enable() #Enable Proximity Sensor circuitry
         utime.sleep(0.5)
         while self.util.io.input(6):
-            
+            lf = 0
+            rt = 0
             if self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 0:
                 utime.sleep_ms(6)
                 self.util.oled.fill(0)
                 self.drive.forward()
                 
             elif self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 1 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 1:
-                utime.sleep_ms(6)
+                utime.sleep_ms(0.1)
                 self.util.prox_disp(1,1,1,1)
                 self.drive.reverse()
-                self.drive.speed_control_deinit()
+                utime.sleep(0.1)
+                self.drive.speed_control_deinit() #Disable Motor speed control 
                 self.drive.stop()
                 utime.sleep(0.2)
-                self.drive.turnright()
-                utime.sleep(0.9)
+                self.drive.spotturn_r()
+                utime.sleep(0.3)
+                if self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 1 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 0:
+                    rt = 1
+                self.drive.spotturn_l()   
+                utime.sleep(0.8)
+                elif self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 1:
+                    lf = 1
+                self.drive.spotturn_r()   
+                utime.sleep(0.5)
+                
+                if lf == 1 and  rt == 0:
+                    self.drive.turnright()
+                    
+                elif lf == 0 and  rt == 1:
+                    self.drive.turnleft()
+                
                 self.drive.speed_control_init()
             
             elif self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 1:
                 self.drive.speed_control_deinit()
-                utime.sleep_ms(6)
+                utime.sleep_ms(0.1)
                 self.util.prox_disp(0,1,0,0)
                 self.drive.turnleft()
-                utime.sleep_ms(15)
+                utime.sleep_ms(5)
                 self.drive.speed_control_init()
                 
             elif self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 0:
                 self.drive.speed_control_deinit()
-                utime.sleep_ms(6)
+                utime.sleep_ms(0.1)
                 self.util.prox_disp(0,0,1,0)
                 self.drive.turnright()
-                utime.sleep_ms(15)
+                utime.sleep_ms(5)
                 self.drive.speed_control_init()
                 
             elif self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 0:
                 self.drive.speed_control_deinit()
-                utime.sleep_ms(6)
+                utime.sleep_ms(0.1)
                 self.util.prox_disp(0,0,0,1)
                 self.drive.turnleft()
-                utime.sleep_ms(15)
+                utime.sleep_ms(5)
                 self.drive.speed_control_init()
                 
             elif self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 1 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 0:
                 self.drive.speed_control_deinit()
-                utime.sleep_ms(6)
+                utime.sleep_ms(0.1)
                 self.util.prox_disp(1,0,0,0)
                 self.drive.turnright()
-                utime.sleep_ms(15)
+                utime.sleep_ms(5)
                 self.drive.speed_control_init()
                 
             self.util.oled.text(run_bat+"V",43,55)  
@@ -283,6 +306,7 @@ class RUNTIME():
         
 
     def motor_test(self):
+        """Test sequence to check the motors are properly connected and functioning"""
         while True:
             run_bat = str(round(self.bat.battery,2))
             self.bat.bat_deinit()
@@ -371,6 +395,7 @@ class RUNTIME():
 
 
     def _prox(self):
+        """Menu for the proximity sensing feature"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
             self.prox.proximity_disable()
@@ -401,6 +426,7 @@ class RUNTIME():
             
             
     def _line(self):
+        """Menu for the line tracking feature"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
             self.util.menu_options("Line","Track","Maze","Q-Maze")
@@ -429,6 +455,8 @@ class RUNTIME():
         
         
     def mode(self):
+    """Menu for the robots features"""
+
         self.util.prev_pos = 20
         while self.util.io.input(6):
             self.util.menu_options("Mode","Proximity","Line","Battle")
@@ -458,6 +486,7 @@ class RUNTIME():
            
 
     def about(self):
+        #Describes the creator of the device
         while self.util.io.input(6):
             self.util.oled.fill(0)
             self.util.oled.text("About",45,5)
@@ -473,6 +502,7 @@ class RUNTIME():
             
             
     def settings(self):
+    """Settings menu"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
             self.util.menu_options("Settings","Battery","Sensors","Motors")
@@ -501,9 +531,10 @@ class RUNTIME():
      
     
     def sensors(self):
+    """Sensors settings Menu"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
-            self.util.menu_options("Sensors","Scale Prox","Scale Line","Battery")
+            self.util.menu_options("Sensors","Scale Prox","View Line","PWR MGMT")
             self.util.cursor(self.util.prev_pos)
             if not self.util.io.input(5):
                 self.util.cursor_up()
@@ -512,13 +543,16 @@ class RUNTIME():
                 self.util.cursor_down()
                 
             elif not self.util.io.input(7)and self.util.prev_pos == 20:
+                #Allows the user to calibrate the proximity sensor using the oled display as feedback and knobs
                 self.util.buzzer()
                 self.proximity_calibration()
                 
             elif not self.util.io.input(7)and self.util.prev_pos == 30:
+                #Allows the user to view the line using the oled display as feedback
                 self.util.buzzer()
                 
             elif not self.util.io.input(7)and self.util.prev_pos == 40:
+                #Power management
                 self.util.buzzer()
                 
             self.icon(True)
@@ -529,6 +563,7 @@ class RUNTIME():
      
     
     def motors_(self):
+        """Motor settings menu"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
             self.util.menu_options("Motors","Set Speed","Test","Stats")
@@ -540,13 +575,16 @@ class RUNTIME():
                 self.util.cursor_down()
                 
             elif not self.util.io.input(7)and self.util.prev_pos == 20:
+                #Allows the user to define low,med and high speeds
                 self.util.buzzer()
                 
             elif not self.util.io.input(7)and self.util.prev_pos == 30:
+                #Initiates the motor test sequence
                 self.util.buzzer()
                 self.motor_test()
                 
             elif not self.util.io.input(7)and self.util.prev_pos == 40:
+                #Allows the view the travel statistics of the device
                 self.util.buzzer()
                 
             self.icon(True)
@@ -557,6 +595,7 @@ class RUNTIME():
     
     
     def set_speed(self):
+        #Enables the user to set the speed of the device
         self.util.prev_pos = 20
         while self.util.io.input(6):
             self.util.menu_options("Set Speed","HI Speed","MED Speed","LO Speed")
@@ -570,6 +609,7 @@ class RUNTIME():
                 
         
     def verify(self):
+        #Unused (Tentative)
         self.util.oled.fill(0)
         self.util.oled.text("Are you sure",25,30)
         self.util.oled.text("yes",7,55)
@@ -577,6 +617,7 @@ class RUNTIME():
      
      
     def menu(self):
+        #Main Menu
         self.util.oled.fill(0)
         self.util.menu_options("ISLA","Mode","Settings","About")
         self.util.cursor(self.util.prev_pos)
@@ -598,16 +639,18 @@ class RUNTIME():
             self.util.buzzer()
             self.about()
         
-        self.icon(False)
+        self.icon(False)  #No back button used 
         
         
     
     def ui(self):
+        #UI when features are being run
         self.util.disp_back()
         self.util.oled.show()
         
         
     def icon(self,scr):
+        #UI symbols
         if scr :
             self.util.disp_back()
         self.util.disp_up()
@@ -616,5 +659,4 @@ class RUNTIME():
         self.util.disp_sel()
         self.util.oled.show()
         
-
 
