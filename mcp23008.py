@@ -1,4 +1,4 @@
-# Modified by Kuzipa Mumba (20 July 2021)
+# Modified by K. Mumba (20 July 2021)
 # Copyright (c) 2014 Adafruit Industries
 # Author: Tony DiCola, ported for Micropython ESP8266 by Cefn Hoile
 # Permission is hereby granted, free of charge, to any person obtaining a copy
