@@ -135,7 +135,7 @@ class RUNTIME():
         """
         self.util.buzzer()
         self.util.buzzer()
-        self.util.title_screen("PROXIMITY","CALIBRATION",30,20)
+        self.util.title_screen("PROXIMITY","CALIBRATION",25,20)
         utime.sleep(1)
         run_bat = str(round(self.bat.battery,2))
         self.bat.bat_deinit()
@@ -219,7 +219,7 @@ class RUNTIME():
     def proximity_sensor(self):
         """Obstacle avoidance feature"""
         self.util.buzzer()
-        self.util.title_screen("OBSTACLE","AVOIDING",35,25)
+        self.util.title_screen("OBSTACLE","AVOIDING",35,35)
         utime.sleep(1)
         run_bat = str(round(self.bat.battery,2))  #Record most recent battery level
         self.bat.bat_deinit() 
@@ -235,62 +235,87 @@ class RUNTIME():
                 self.drive.forward()
                 
             elif self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 1 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 1:
-                utime.sleep_ms(0.1)
+                utime.sleep_us(100)
                 self.util.prox_disp(1,1,1,1)
                 self.drive.reverse()
-                utime.sleep(0.1)
+                utime.sleep(0.4)
                 self.drive.speed_control_deinit() #Disable Motor speed control 
                 self.drive.stop()
-                utime.sleep(0.2)
-                self.drive.spotturn_r()
                 utime.sleep(0.3)
-                if self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 1 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 0:
-                    rt = 1
-                self.drive.spotturn_l()   
-                utime.sleep(0.8)
-                elif self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 1:
+                
+                self.drive.spotturn_r()
+                utime.sleep_ms(250)
+                self.drive.stop()
+                utime.sleep_ms(500)
+                if self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 1 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 1:
                     lf = 1
-                self.drive.spotturn_r()   
-                utime.sleep(0.5)
+                     
+                self.drive.spotturn_l()
+                utime.sleep_ms(250)
+                
+                self.drive.stop()
+                utime.sleep_ms(500)
+                
+                self.drive.spotturn_l()
+                utime.sleep_ms(250)
+                self.drive.stop()
+                utime.sleep_ms(500)
+                if self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 1 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 1:
+                    rt = 1
+                    
+                self.drive.spotturn_r()
+                utime.sleep_ms(250)
+                self.drive.stop()
+                utime.sleep(0.35)
                 
                 if lf == 1 and  rt == 0:
+#                     print("left:",str(lf))
+#                     print("right:",str(rt))
                     self.drive.turnright()
+                    utime.sleep(0.3)
                     
-                elif lf == 0 and  rt == 1:
+                if lf == 0 and  rt == 1:
+#                     print("left:",str(lf))
+#                     print("right:",str(rt))
                     self.drive.turnleft()
-                
+                    utime.sleep(0.3)
+                    
                 self.drive.speed_control_init()
             
             elif self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 1:
                 self.drive.speed_control_deinit()
-                utime.sleep_ms(0.1)
                 self.util.prox_disp(0,1,0,0)
+                self.drive.stop()
+                utime.sleep_ms(5)
                 self.drive.turnleft()
                 utime.sleep_ms(5)
                 self.drive.speed_control_init()
                 
             elif self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 0:
                 self.drive.speed_control_deinit()
-                utime.sleep_ms(0.1)
                 self.util.prox_disp(0,0,1,0)
+                self.drive.stop()
+                utime.sleep_ms(5)
                 self.drive.turnright()
                 utime.sleep_ms(5)
                 self.drive.speed_control_init()
                 
             elif self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 0:
                 self.drive.speed_control_deinit()
-                utime.sleep_ms(0.1)
                 self.util.prox_disp(0,0,0,1)
-                self.drive.turnleft()
+                self.drive.stop()
                 utime.sleep_ms(5)
+                self.drive.turnleft()
+                utime.sleep_ms(50)
                 self.drive.speed_control_init()
                 
             elif self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 1 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 0:
                 self.drive.speed_control_deinit()
-                utime.sleep_ms(0.1)
                 self.util.prox_disp(1,0,0,0)
-                self.drive.turnright()
+                self.drive.stop()
                 utime.sleep_ms(5)
+                self.drive.turnright()
+                utime.sleep_ms(50)
                 self.drive.speed_control_init()
                 
             self.util.oled.text(run_bat+"V",43,55)  
@@ -341,7 +366,7 @@ class RUNTIME():
             self.drive.stop()
             utime.sleep(0.2)
             self.drive.turnright()
-            utime.sleep(1.1)
+            utime.sleep(1.3)
             self.drive.stop()
             utime.sleep(0.2)
             self.drive.forward()
@@ -349,7 +374,7 @@ class RUNTIME():
             self.drive.stop()
             utime.sleep(0.2)
             self.drive.turnright()
-            utime.sleep(0.3)
+            utime.sleep(0.2)
             
             self.util.title_screen("TURNING","LEFT",34,45)
             self.ui()
@@ -357,7 +382,7 @@ class RUNTIME():
             self.drive.stop()
             utime.sleep(0.5)
             self.drive.turnleft()
-            utime.sleep(1.1)
+            utime.sleep(1.3)
             self.drive.forward()
             utime.sleep(2)
             self.drive.stop()
@@ -375,11 +400,20 @@ class RUNTIME():
             self.ui()
             self.util.oled.fill(0)
             
+            self.drive.speed_control_deinit()
+            
             self.drive.stop()
             utime.sleep(0.75)
-            self.drive.reverse()
-            utime.sleep(2)
             
+            self.drive.speed_control_init()
+            
+            self.LO = 25000 
+            self.MED = 30000
+            self.HI = 35000
+            
+            self.drive.reverse()
+            utime.sleep(3)
+            self.drive.speed_control_deinit()
             self.util.oled.fill(0)
             self.util.title_screen("TEST","COMPLETE",45,30)
             self.util.oled.text(run_bat+"V",43,55) 
@@ -388,8 +422,7 @@ class RUNTIME():
             self.drive.stop()
             self.util.buzzer()
             self.util.buzzer()
-            
-            self.drive.speed_control_deinit()
+        
             self.bat.bat_sensor_en()
             break
 
@@ -455,8 +488,7 @@ class RUNTIME():
         
         
     def mode(self):
-    """Menu for the robots features"""
-
+        """Menu for the robots features"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
             self.util.menu_options("Mode","Proximity","Line","Battle")
@@ -492,7 +524,7 @@ class RUNTIME():
             self.util.oled.text("About",45,5)
             self.util.oled.text("ISLA",45,20)
             self.util.oled.text("Copyright 2021",10,30)
-            self.util.oled.text("By Kuzipa Mumba",5,40)
+            self.util.oled.text("By K.Mumba",5,40)
             self.util.disp_back()
             self.util.oled.show()
 
@@ -502,7 +534,7 @@ class RUNTIME():
             
             
     def settings(self):
-    """Settings menu"""
+        """Settings menu"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
             self.util.menu_options("Settings","Battery","Sensors","Motors")
@@ -531,7 +563,7 @@ class RUNTIME():
      
     
     def sensors(self):
-    """Sensors settings Menu"""
+        """Sensors settings Menu"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
             self.util.menu_options("Sensors","Scale Prox","View Line","PWR MGMT")
@@ -607,15 +639,7 @@ class RUNTIME():
             elif not self.util.io.input(4):
                 self.util.cursor_down()
                 
-        
-    def verify(self):
-        #Unused (Tentative)
-        self.util.oled.fill(0)
-        self.util.oled.text("Are you sure",25,30)
-        self.util.oled.text("yes",7,55)
-        self.util.oled.text("no",122,55)
-     
-     
+
     def menu(self):
         #Main Menu
         self.util.oled.fill(0)
@@ -642,7 +666,6 @@ class RUNTIME():
         self.icon(False)  #No back button used 
         
         
-    
     def ui(self):
         #UI when features are being run
         self.util.disp_back()
@@ -658,5 +681,4 @@ class RUNTIME():
         self.disp_bat()
         self.util.disp_sel()
         self.util.oled.show()
-        
-
+       
