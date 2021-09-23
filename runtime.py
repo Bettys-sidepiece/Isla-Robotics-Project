@@ -1,6 +1,6 @@
 #RUNTIME CLASS
 #Copyright (c) 2021
-#Author: Kuzipa Mumba for the RP2040 Raspberry Pi Pico
+#Author: K.Mumba for the RP2040 Raspberry Pi Pico
 
 import machine
 import utime
