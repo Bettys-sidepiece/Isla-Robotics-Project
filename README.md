@@ -53,7 +53,6 @@ Maze Solving (Proximity)
 Path Retracing
 Maze Solving (Reverse)
 
-
 Shortcomings
 --------
 
