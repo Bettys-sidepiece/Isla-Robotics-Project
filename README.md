@@ -1,4 +1,5 @@
 #ISLA
+---
 The ISLA Project is a DIY friendly autonomous robot using only mostly through hole components making this design very easy to implement for anyone with some money, a Raspberry Pi Pico and a soldering iron. I decided to make this because I wanted to create something that would be easy to make even for people who do not have access to specific equipment such as a reflow oven, a scope, or a 3D printer. The Design is powered by 4 AAA batteries, which are used to power the various sensors and the microcontroller. The microcontroller control the battery sensor, motors, proximity sensor and line sensor on the device.
 
 Microcontroller
