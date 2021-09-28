@@ -8,17 +8,17 @@ This device is built around the Raspberry Pi Foundation's Arm Processor RP2040 m
 
 Indicators
 --------
-Power LED
-Sensor LED
-Buzzer
-OLED Display
+ - Power LED
+ - Sensor LED
+ - Buzzer
+ - OLED Display
 
 Sensors
 ----
-4x Infrared Proximity sensors
-4x Infrared Line Sensors
-Battery Sensor
-2x Motor Encoders
+ - 4x Infrared Proximity sensors
+ - 4x Infrared Line Sensors
+ - Battery Sensor
+ - 2x Motor Encoders
 
 Power Management
 ---------
@@ -27,9 +27,9 @@ The device uses a 5V buck-boost module to regulate its operating voltage, it req
 
 In order to accurately monitor the battery level the battery monitor is directly wired to the unregulated voltage source.The ISLA robot uses a simple latching circuit to power off and on by the press of a button. The circuit has the following features
 
-Quick startup
-3 second power off delay
-1 second hard reset
+ - Quick startup
+ - 3 second power off delay
+ - 1 second hard reset
 
 In order to reduce the power draw by the sensors while Idle the the sensors are powered on and off using BJT load switches embedded on the board.
 
@@ -41,17 +41,17 @@ To fully utilize all the pins off the Pico the load switches and buzzer are cont
 Programming
 ------
 
-MicroPython
-Thonny IDE
+ - MicroPython
+ - Thonny IDE
 
 The firmware of this robot is fairly easy to follow and reverse engineer, feel from to view it in the repository
 The device firmware is still under development therefore there are several features that are not enabled such as,
 
-Line Tracking
-Maze Solving (Line)
-Maze Solving (Proximity)
-Path Retracing
-Maze Solving (Reverse)
+ - Line Tracking
+ - Maze Solving (Line)
+ - Maze Solving (Proximity)
+ - Path Retracing
+ - Maze Solving (Reverse)
 
 Shortcomings
 --------
