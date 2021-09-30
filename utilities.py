@@ -13,8 +13,7 @@ class UTILITIES():
         On the ISLA PROJECT
     """
     def __init__(self,setup = True):
-        """ Initialise the external devices, and control variables
-        """
+        """ Initialise the external devices, and control variables"""
         i2c = machine.I2C(0,scl = machine.Pin(21), sda= machine.Pin(20), freq = 400000)
         self.oled = SSD1306_I2C(128,64,i2c)
         self.io = mcp23008.MCP23008()
@@ -23,8 +22,7 @@ class UTILITIES():
         self.prev_display = None #Variable default
          
         if setup:
-            """ System set up to initialise the external GPIO pins on the MCP23008
-            """
+            """ System set up to initialise the external GPIO pins on the MCP23008"""
             outPins = list(range(0,4)) #Generate a list of ints from 0 - 3
             for pinNum in outPins:
                 self.io.setup(pinNum, mcp23008.OUT) #Set pins 0-3 of the MCP23008 to outputs 
@@ -36,8 +34,7 @@ class UTILITIES():
               
               
     def buzzer(self):
-        """ Generate a tone from the on board buzzer
-        """
+        """ Generate a tone from the on board buzzer"""
         utime.sleep(0.1)
         for i in range(50):
             for j in range(1):
@@ -49,8 +46,7 @@ class UTILITIES():
         
         
     def start_up(self):
-        """ System start up screen sequence
-        """
+        """ System start up screen sequence"""
         self.buzzer()
         self.oled.contrast(15)
         self.oled.fill(0)
@@ -152,36 +148,31 @@ class UTILITIES():
         
         
     def OT_header(self):
-        """ Header for Object tracking
-        """
+        """ Header for Object tracking"""
         self.oled.text("OBJECT TRACKING",15,10)
         self.disp_back
         
         
     def OA_header(self):
-        """ Header for Obstacle avoidance mode
-        """
+        """ Header for Obstacle avoidance mode"""
         self.oled.text("PROXIMITY",25,45)
         self.disp_back
         
         
     def maze_header(self):
-        """ Header for Maze Solver
-        """
+        """ Header for Maze Solver"""
         self.oled.text("MAZE SOLVER",25,5)
         self.disp_back
     
     
     def line_header(self):
-        """ Header for Line tracking
-        """
+        """ Header for Line tracking"""
         self.oled.text("LINE TRACKING",25,5)
         self.disp_back
     
     
     def combat_header(self):
-        """ Header for Combat Mode
-        """
+        """ Header for Combat Mode"""
         self.oled.text("COMBAT",35,5)
         self.disp_back
     
