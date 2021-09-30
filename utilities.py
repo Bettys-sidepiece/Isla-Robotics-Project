@@ -13,7 +13,8 @@ class UTILITIES():
         On the ISLA PROJECT
     """
     def __init__(self,setup = True):
-        """ Initialise the external devices, and control variables"""
+        """ Initialise the external devices, and control variables
+        """
         i2c = machine.I2C(0,scl = machine.Pin(21), sda= machine.Pin(20), freq = 400000)
         self.oled = SSD1306_I2C(128,64,i2c)
         self.io = mcp23008.MCP23008()
@@ -35,7 +36,8 @@ class UTILITIES():
               
               
     def buzzer(self):
-        """ Generate a tone from the on board buzzer"""
+        """ Generate a tone from the on board buzzer
+        """
         utime.sleep(0.1)
         for i in range(50):
             for j in range(1):
@@ -47,7 +49,8 @@ class UTILITIES():
         
         
     def start_up(self):
-        """ System start up screen sequence"""
+        """ System start up screen sequence
+        """
         self.buzzer()
         self.oled.contrast(15)
         self.oled.fill(0)
@@ -149,34 +152,38 @@ class UTILITIES():
         
         
     def OT_header(self):
-        """ Header for Object tracking """
+        """ Header for Object tracking
+        """
         self.oled.text("OBJECT TRACKING",15,10)
         self.disp_back
         
         
     def OA_header(self):
-        """ Header for Obstacle avoidance mode"""
+        """ Header for Obstacle avoidance mode
+        """
         self.oled.text("PROXIMITY",25,45)
         self.disp_back
         
         
     def maze_header(self):
-        """ Header for Maze Solver"""
+        """ Header for Maze Solver
+        """
         self.oled.text("MAZE SOLVER",25,5)
         self.disp_back
     
     
     def line_header(self):
-        """ Header for Line tracking"""
+        """ Header for Line tracking
+        """
         self.oled.text("LINE TRACKING",25,5)
         self.disp_back
     
     
     def combat_header(self):
-        """ Header for Combat Mode"""
+        """ Header for Combat Mode
+        """
         self.oled.text("COMBAT",35,5)
         self.disp_back
-    
     
     def prox_disp(self,l,cl,cr,r):
         """Used to display dots showing which IR sensor on the proximity sensor
@@ -188,5 +195,15 @@ class UTILITIES():
         self.oled.fill_rect(70, 25, 15, 15, cr)
         self.oled.fill_rect(100, 25, 15, 15, r)
     
-
-
+    def stats(self,dist,speed,time):
+        
+        dist_ = ("Distance:"+str(round(distance,2))+"cm")
+        rpm_ = ("Max RPM:"+str(round(speed,2))+"RPM")
+        speed_ = ("Max RPM:"+str(round(speed,2))+"cm/s")
+           
+        self.oled.fill(0)
+        self.oled.text("ISLA STATS",40,5)
+        self.oled.text(dist_,20,20)
+        self.oled.text(rpm_,20,30)
+        self.oled.text(speed_,20,40)
+       
