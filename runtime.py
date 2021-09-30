@@ -19,6 +19,7 @@ class RUNTIME():
         self.LO = 35000  #Low speed default duty cycle
         self.MED = 40000 #Medium speed default duty cycle
         self.HI = 45000  #High speed default duty cycle
+        self.speed = ":[M]"
         
         self.drive = MOTORS() #Create object of MOTORS Class
         self.drive.set_PWM(LO=self.LO,MED=self.MED,HI=self.HI) 
@@ -246,9 +247,13 @@ class RUNTIME():
                 self.drive.spotturn_r()
                 utime.sleep_ms(250)
                 self.drive.stop()
-                utime.sleep_ms(500)
-                if self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 1 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 1:
+                utime.sleep_ms(600)
+                if self.prox.prox_right.value() == 1 and self.prox.prox_left.value()==1:
+                    utime.sleep_ms(100)
+                    self.util.prox_disp(1,1,1,1)
                     lf = 1
+                else:
+                    self.util.prox_disp(0,0,0,0)
                      
                 self.drive.spotturn_l()
                 utime.sleep_ms(250)
@@ -259,36 +264,61 @@ class RUNTIME():
                 self.drive.spotturn_l()
                 utime.sleep_ms(250)
                 self.drive.stop()
-                utime.sleep_ms(500)
-                if self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 1 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 1:
+                utime.sleep_ms(600)
+                if self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 1:
+                    utime.sleep_ms(100)
+                    self.util.prox_disp(1,1,1,1)
                     rt = 1
+                else:
+                    self.util.prox_disp(0,0,0,0)
                     
                 self.drive.spotturn_r()
                 utime.sleep_ms(250)
+                self.drive.forward()
+                utime.sleep(0.2)
                 self.drive.stop()
-                utime.sleep(0.35)
+                utime.sleep(0.3)
                 
-                if lf == 1 and  rt == 0:
-#                     print("left:",str(lf))
-#                     print("right:",str(rt))
+                if lf == 1 and rt == 0:
+                   # print("lf = 1: rt = 0")
                     self.drive.turnright()
+                    utime.sleep(0.6)
+                    self.drive.stop()
                     utime.sleep(0.3)
                     
-                if lf == 0 and  rt == 1:
-#                     print("left:",str(lf))
-#                     print("right:",str(rt))
+                elif lf == 0 and rt == 1:
+                   # print("lf = 0: rt = 1")
                     self.drive.turnleft()
+                    utime.sleep(0.6)
+                    self.drive.stop()
                     utime.sleep(0.3)
                     
+                    
+                elif lf == 0 and rt == 0:
+                    #print("lf = 0: rt = 0")
+                    self.drive.spotturn_r()
+                    utime.sleep_ms(600)
+                    self.drive.stop()
+                    utime.sleep(0.3)
+                    
+                     
+                elif lf == 1 and rt == 1:
+                   # print("lf = 1: rt = 1")
+                    self.drive.spotturn_r()
+                    utime.sleep(1.2)
+                    self.drive.stop()
+                    utime.sleep(0.3)
+                     
                 self.drive.speed_control_init()
+                    
             
             elif self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 1:
                 self.drive.speed_control_deinit()
                 self.util.prox_disp(0,1,0,0)
                 self.drive.stop()
                 utime.sleep_ms(5)
-                self.drive.turnleft()
-                utime.sleep_ms(5)
+                self.drive.turnleft() 
+                utime.sleep_ms(2)
                 self.drive.speed_control_init()
                 
             elif self.prox.prox_right.value() == 0 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 1 and self.prox.prox_cntrL.value() == 0:
@@ -297,14 +327,14 @@ class RUNTIME():
                 self.drive.stop()
                 utime.sleep_ms(5)
                 self.drive.turnright()
-                utime.sleep_ms(5)
+                utime.sleep_ms(2)
                 self.drive.speed_control_init()
                 
             elif self.prox.prox_right.value() == 1 and self.prox.prox_left.value() == 0 and self.prox.prox_cntrR.value() == 0 and self.prox.prox_cntrL.value() == 0:
                 self.drive.speed_control_deinit()
                 self.util.prox_disp(0,0,0,1)
                 self.drive.stop()
-                utime.sleep_ms(5)
+                utime.sleep_ms(2)
                 self.drive.turnleft()
                 utime.sleep_ms(50)
                 self.drive.speed_control_init()
@@ -524,7 +554,7 @@ class RUNTIME():
             self.util.oled.text("About",45,5)
             self.util.oled.text("ISLA",45,20)
             self.util.oled.text("Copyright 2021",10,30)
-            self.util.oled.text("By K.Mumba",5,40)
+            self.util.oled.text("By K.Mumba",25,40)
             self.util.disp_back()
             self.util.oled.show()
 
@@ -537,7 +567,7 @@ class RUNTIME():
         """Settings menu"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
-            self.util.menu_options("Settings","Battery","Sensors","Motors")
+            self.util.menu_options("Settings","Extra","Sensors","Motors")
             self.util.cursor(self.util.prev_pos)
             if not self.util.io.input(5):
                 self.util.cursor_up()
@@ -566,7 +596,7 @@ class RUNTIME():
         """Sensors settings Menu"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
-            self.util.menu_options("Sensors","Scale Prox","View Line","PWR MGMT")
+            self.util.menu_options("Sensors","Scale Prox","View Line","Battery")
             self.util.cursor(self.util.prev_pos)
             if not self.util.io.input(5):
                 self.util.cursor_up()
@@ -598,7 +628,8 @@ class RUNTIME():
         """Motor settings menu"""
         self.util.prev_pos = 20
         while self.util.io.input(6):
-            self.util.menu_options("Motors","Set Speed","Test","Stats")
+            text = ("Speed"+self.speed)
+            self.util.menu_options("Motors",text,"Test","Stats")
             self.util.cursor(self.util.prev_pos)
             if not self.util.io.input(5):
                 self.util.cursor_up()
@@ -609,6 +640,7 @@ class RUNTIME():
             elif not self.util.io.input(7)and self.util.prev_pos == 20:
                 #Allows the user to define low,med and high speeds
                 self.util.buzzer()
+                self.set_speed()
                 
             elif not self.util.io.input(7)and self.util.prev_pos == 30:
                 #Initiates the motor test sequence
@@ -618,19 +650,21 @@ class RUNTIME():
             elif not self.util.io.input(7)and self.util.prev_pos == 40:
                 #Allows the view the travel statistics of the device
                 self.util.buzzer()
+                #self.util.stats()
                 
             self.icon(True)
             
             if not self.util.io.input(6):
                 self.util.buzzer()
                 break
-    
-    
+        
+        
     def set_speed(self):
         #Enables the user to set the speed of the device
         self.util.prev_pos = 20
         while self.util.io.input(6):
-            self.util.menu_options("Set Speed","HI Speed","MED Speed","LO Speed")
+            text = ("Speed"+self.speed)
+            self.util.menu_options(text,"Low Speed","Med Speed","Hi Speed")
             self.util.cursor(self.util.prev_pos)
             
             if not self.util.io.input(5):
@@ -638,6 +672,30 @@ class RUNTIME():
                 
             elif not self.util.io.input(4):
                 self.util.cursor_down()
+            
+            elif not self.util.io.input(7)and self.util.prev_pos == 20:
+                #Allows the user to define low,med and high speeds
+                self.util.buzzer()
+                self.drive.set_PWM(30000,35000,40000)
+                self.speed = ":[L]"
+                
+            elif not self.util.io.input(7)and self.util.prev_pos == 30:
+                #Initiates the motor test sequence
+                self.util.buzzer()
+                self.drive.set_PWM(35000,40000,45000)
+                self.speed = ":[M]"
+                
+            elif not self.util.io.input(7)and self.util.prev_pos == 40:
+                #Allows the view the travel statistics of the device
+                self.util.buzzer()
+                self.drive.set_PWM(40000,45000,50000)
+                self.speed = ":[H]"
+                
+            self.icon(True)
+            
+            if not self.util.io.input(6):
+                self.util.buzzer()
+                break
                 
 
     def menu(self):
@@ -681,4 +739,4 @@ class RUNTIME():
         self.disp_bat()
         self.util.disp_sel()
         self.util.oled.show()
-       
+        
