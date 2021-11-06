@@ -64,7 +64,6 @@ The device firmware is still under development therefore there are several featu
 
 Shortcomings
 --------
-
 Most the shortcomings of this project are in the PCB design, these have been corrected for in the two PCB schematics using notes please. However, This project can be done in various ways many of which are better and more efficient, I chose to do it this way to maximise the space being used.
 
 Media
