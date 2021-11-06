@@ -6,7 +6,7 @@ PCB Design
 ------
 In the spirit of open source design this entire project is designed using open source software.
 
-The outline of the PCB was designed using INKSPACE.
+The outline of the PCB was designed using Inkspace.
 
 the PCB design and schematics were done using Fritzing.
 
