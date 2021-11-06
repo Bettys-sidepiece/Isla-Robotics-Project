@@ -9,7 +9,6 @@ In the spirit of open source design this entire project is designed using open s
 The outline of the PCB was designed using Inkspace.
 
 the PCB design and schematics were done using Fritzing.
-![image](https://user-images.githubusercontent.com/69733679/140615820-d1dc3332-90e5-4dbd-8c14-2d76b53c1b90.png)
 
 
 Microcontroller
